@@ -52,5 +52,12 @@ pipeline {
          }
         }
       }
+     stage('Deploying to EKS') {
+     steps{  
+         script {
+                sh "kubectl apply -f eksdeploy.yml"
+         }
+        }
+      }
     }
 }
