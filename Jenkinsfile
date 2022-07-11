@@ -55,7 +55,9 @@ pipeline {
      stage('Deploying to EKS') {
      steps{  
          script {
-                sh "kubectl apply -f eksdeploy.yml"
+             withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'awseks', namespace: '', serverUrl: '') {
+                 sh "kubectl apply -f eksdeploy.yml"
+}
          }
         }
       }
