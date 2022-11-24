@@ -21,7 +21,7 @@ pipeline {
             steps {
                 echo 'Deploy war file to Tomcat server'
 //                 deploy adapters: [tomcat9(credentialsId: 'tomcat9', path: '', url: 'http://18.118.21.49:9090')], war: '**/*.war'
-                deploy adapters: [tomcat9(credentialsId: 'tomcat9', path: '', url: 'http://18.118.21.49:9090')], onFailure: false, war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9', path: '', url: 'http://18.118.21.49:9090')], onFailure: false, war: '*/*.war'
             }
         }
     }
