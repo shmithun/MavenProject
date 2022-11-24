@@ -10,7 +10,7 @@
 		<meta charset="utf-8">
 		<title>Welcome</title>
 	</head> 
-	<center><h1>Hello! All></center>
+	<center><h1>Hello! Welcome to pipeline script jenkins project type.</center>
 	<body>
 		<c:url value="/showMessage.html" var="messageUrl" />
 		<a href="${messageUrl}">Click to enter</a><br>
