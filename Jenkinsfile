@@ -26,7 +26,7 @@ pipeline {
                 deploy adapters: [tomcat9(credentialsId: 'tomcat9', path: '', url: 'http://18.118.21.49:9090')], onFailure: false, war: '*/*.war'
             }
         }
-        stage('Deploy') {
+        stage('nexus') {
             steps {
                 echo 'upload to nexus'
                 nexusArtifactUploader artifacts: [[artifactId: 'myapp', classifier: '', file: 'target/myapp-1.0.0.war', type: 'war']], credentialsId: 'nexus3', groupId: 'com.mithun', nexusUrl: 'http://18.217.229.84:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'repository/devops/', version: '2.0.0'
