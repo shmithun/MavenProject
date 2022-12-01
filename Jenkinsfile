@@ -27,8 +27,7 @@ pipeline {
         stage('nexus') {
             steps {
                 echo 'upload to nexus'
-                nexusArtifactUploader artifacts: [[artifactId: 'myapp', classifier: '', file: 'target/myapp-1.0.0.war', type: 'war']], credentialsId: 'nexus3', groupId: 'com.mithun', nexusUrl: 'http://3.145.29.127:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'repository/devops/', version: '2.0.0'
-        }
+nexusArtifactUploader artifacts: [[artifactId: 'myapp', classifier: '', file: 'target/myapp-1.0.0.war', type: 'war']], credentialsId: 'nexus3', groupId: 'com.mithun', nexusUrl: '3.145.29.127:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'repository/devops/', version: '2.0.0'            }
         }
        }
 }
