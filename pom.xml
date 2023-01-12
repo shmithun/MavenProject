@@ -15,10 +15,9 @@
 		<org.slf4j-version>1.6.6</org.slf4j-version>
 		<maven.compiler.source>11</maven.compiler.source>
         	<maven.compiler.target>11</maven.compiler.target>
-	</properties>
+	</properties>/
 	
 	
-		
 		<!-- Spring -->
 	<dependencies>
 		<dependency>
