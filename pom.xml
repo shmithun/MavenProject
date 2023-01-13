@@ -154,7 +154,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
+                <version>1.2.2</version>
                 <configuration>
                     <mainClass>org.test.int1.Main</mainClass>
                 </configuration>
@@ -162,8 +162,8 @@
 		
 
 <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugins</artifactId>
+    <groupId>org.apache.maven.plugin</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
     <configuration>
         <source>1.7</source>
         <target>1.7</target>
