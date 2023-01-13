@@ -162,7 +162,7 @@
 		
 
 <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
+    <groupId>org.apache.maven.plugin</groupId>
     <artifactId>maven-compiler-plugin</artifactId>
     <configuration>
         <source>1.7</source>
