@@ -4,64 +4,30 @@ pipeline {
         maven 'maven'
         jdk 'java'
     }
-    environment {
-        AWS_ACCOUNT_ID="174609780267"
-        AWS_DEFAULT_REGION="us-west-1" 
-        IMAGE_REPO_NAME="pipeline"
-        IMAGE_TAG= "latest"
-        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
-    }
-   
     stages {
-        
-         stage('Logging into AWS ECR') {
+        stage('Git Clone') {
             steps {
-                script {
-                sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-                }
-                 
+                echo 'Clone Github Source code'
+                git credentialsId: 'git', url: 'https://github.com/shmithun/MavenProject.git'
             }
         }
-        
-        stage('Cloning Git') {
+        stage('Maven Build') {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', url: 'https://github.com/shmithun/MavenProject.git']]])     
+                echo 'maven build step'
+                sh 'mvn clean install'
             }
         }
-         stage('Maven Build') {
+        stage('Deploy') {
             steps {
-               sh "mvn clean package" 
+                echo 'Deploy war file to Tomcat server'
+//                 deploy adapters: [tomcat9(credentialsId: 'tomcat9', path: '', url: 'http://18.118.21.49:9090')], war: '**/*.war'
+                deploy adapters: [tomcat9(credentialsId: 'tomcat9', path: '', url: 'http://3.145.29.127:9090')], onFailure: false, war: '*/*.war'
             }
         }
-  
-    // Building Docker images
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+        stage('nexus') {
+            steps {
+                echo 'upload to nexus'
+nexusArtifactUploader artifacts: [[artifactId: 'myapp', classifier: '', file: 'target/myapp-1.0.0.war', type: 'war']], credentialsId: 'nexus3', groupId: 'com.mithun', nexusUrl: '3.145.29.127:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'repository/devops/', version: '2.0.0'            }
         }
-      }
-    }
-   
-    // Uploading Docker images into AWS ECR
-    stage('Pushing to ECR') {
-     steps{  
-         script {
-                sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
-                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
-         }
-        }
-      }
-     stage('Deploying to EKS') {
-     steps{  
-         script {
-            withKubeConfig([credentialsId: 'awseks']) {
-        sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'  
-        sh 'chmod u+x ./kubectl'  
-        sh "./kubectl apply -f eksdeploy.yml"
-}
-         }
-        }
-      }
-    }
+       }
 }
